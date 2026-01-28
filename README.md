@@ -1,29 +1,56 @@
-# Create T3 App
+# AI Boilerplate
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A [T3 Stack](https://create.t3.gg/) boilerplate configured for AI-assisted development with enforced architecture constraints.
 
-## What's next? How do I make an app with this?
+## Stack
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- **[Next.js](https://nextjs.org)** - React framework
+- **[Drizzle](https://orm.drizzle.team)** - TypeScript ORM
+- **[Tailwind CSS](https://tailwindcss.com)** - Utility-first CSS
+- **[Better Auth](https://www.better-auth.com)** - Authentication
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+Created with `create-t3-app` (without tRPC).
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Architecture
 
-## Learn More
+This boilerplate enforces two complementary architectural patterns:
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Subsystem Architecture
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Code is organized into **subsystems** - directories with clear boundaries, declared dependencies, and public APIs. This keeps the codebase navigable as it grows.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+- Enforced by [`subsystems-architecture`](https://github.com/Diplow/subsystems-architecture) submodule
+- Run `pnpm check:architecture` to validate
+- Run `pnpm subsystem-tree` to visualize
 
-## How do I deploy this?
+### Domain-Driven Design
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Business logic lives in isolated **domains** under `src/lib/domains/`. Each domain has services (entry points), objects (types/entities), actions (pure logic), and repositories (data access).
+
+See [`src/lib/domains/README.md`](src/lib/domains/README.md) for details.
+
+## AI-Assisted Development
+
+The `CLAUDE.md` file provides instructions for AI assistants (Claude Code, Cursor, etc.):
+
+- **Rule of 6** - Consistent limits on complexity (max 6 children, 6 functions per file, etc.)
+- **Subsystem constraints** - How to declare and respect boundaries
+- **DDD patterns** - How to structure features across layers
+- **Planning workflow** - Commands like `/plan-subsystem` and `/plan-feature`
+
+## Getting Started
+
+```bash
+pnpm install
+pnpm dev
+```
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start development server |
+| `pnpm build` | Build for production |
+| `pnpm check:architecture` | Validate subsystem boundaries |
+| `pnpm check:ruleof6` | Check complexity limits |
+| `pnpm subsystem-tree` | Display subsystem hierarchy |
