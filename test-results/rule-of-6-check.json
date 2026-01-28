@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-01-28T17:31:43.294188",
+  "target_path": "src",
+  "execution_time": 0.00033783912658691406,
+  "summary": {
+    "total_errors": 0,
+    "total_warnings": 0,
+    "by_type": {},
+    "by_subsystem": {},
+    "by_recommendation": {}
+  },
+  "errors": []
+}

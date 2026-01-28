@@ -17,7 +17,10 @@
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:architecture": "python3 -m scripts.checks.architecture.main",
+    "check:ruleof6": "python3 -m scripts.checks.architecture.ruleof6.main",
+    "subsystem-tree": "python3 -m scripts.checks.architecture.tree.main"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.2",
