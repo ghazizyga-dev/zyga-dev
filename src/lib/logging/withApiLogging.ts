@@ -37,7 +37,12 @@ export function withApiLogging<T extends Record<string, RouteHandler>>(
       try {
         const response = await originalHandler(...(args as never[]));
         const durationMs = Math.round(performance.now() - startTime);
-        const userId = (await resolveUserId?.()) ?? null;
+        let userId: string | null = null;
+        try {
+          userId = (await resolveUserId?.()) ?? null;
+        } catch (resolverError) {
+          console.warn("Failed to resolve userId for API logging", resolverError);
+        }
         const event: ApiAnalyticsEvent = {
           route: routePattern,
           method: methodName,
@@ -51,7 +56,12 @@ export function withApiLogging<T extends Record<string, RouteHandler>>(
         return response;
       } catch (error) {
         const durationMs = Math.round(performance.now() - startTime);
-        const userId = (await resolveUserId?.()) ?? null;
+        let userId: string | null = null;
+        try {
+          userId = (await resolveUserId?.()) ?? null;
+        } catch (resolverError) {
+          console.warn("Failed to resolve userId for API logging", resolverError);
+        }
         const event: ApiAnalyticsEvent = {
           route: routePattern,
           method: methodName,
