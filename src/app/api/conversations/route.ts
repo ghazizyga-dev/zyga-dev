@@ -55,6 +55,14 @@ async function handleCreateConversation(request: Request) {
     return Response.json({ error: "Contact not found" }, { status: 404 });
   }
 
+  const { hasCredits } = await IamService.checkCredits(currentUser.id);
+  if (!hasCredits) {
+    return Response.json(
+      { error: "Insufficient credits" },
+      { status: 402 },
+    );
+  }
+
   const createdConversation = await ConversationService.create(
     currentUser.id,
     { contactId, sellingContext },
@@ -72,13 +80,6 @@ async function handleCreateConversation(request: Request) {
     createdConversation.id,
     { contactInfo, sellingContext, conversationHistory: [] },
   );
-
-  if (!draftResult) {
-    return Response.json(
-      { error: "Insufficient credits" },
-      { status: 402 },
-    );
-  }
 
   return Response.json(
     { conversation: createdConversation, firstMessage: draftResult },
