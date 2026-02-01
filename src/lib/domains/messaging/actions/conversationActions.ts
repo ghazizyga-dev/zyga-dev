@@ -23,3 +23,19 @@ export async function listConversations(
 ) {
   return repository.findAllByOwner(ownerId);
 }
+
+export async function touchConversation(
+  repository: ConversationRepository,
+  conversationId: number,
+  ownerId: string,
+) {
+  return repository.touch(conversationId, ownerId);
+}
+
+export async function findConversationByContact(
+  repository: ConversationRepository,
+  contactId: number,
+  ownerId: string,
+) {
+  return repository.findByContactAndOwner(contactId, ownerId);
+}
