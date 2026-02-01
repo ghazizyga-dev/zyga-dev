@@ -20,7 +20,21 @@ async function handleListConversations() {
   }
 
   const conversations = await ConversationService.list(currentUser.id);
-  return Response.json(conversations);
+  const contacts = await ContactService.list(currentUser.id);
+
+  const contactMap = new Map(contacts.map((contact) => [contact.id, contact]));
+
+  const enrichedConversations = conversations.map((conversation) => {
+    const contact = contactMap.get(conversation.contactId);
+    return {
+      ...conversation,
+      contact: contact
+        ? { firstName: contact.firstName, lastName: contact.lastName, company: contact.company }
+        : null,
+    };
+  });
+
+  return Response.json(enrichedConversations);
 }
 
 async function handleCreateConversation(request: Request) {
@@ -80,6 +94,8 @@ async function handleCreateConversation(request: Request) {
     createdConversation.id,
     { contactInfo, sellingContext, conversationHistory: [] },
   );
+
+  await ConversationService.touch(createdConversation.id, currentUser.id);
 
   return Response.json(
     { conversation: createdConversation, firstMessage: draftResult },

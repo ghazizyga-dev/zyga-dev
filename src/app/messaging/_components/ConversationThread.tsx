@@ -99,7 +99,7 @@ export function ConversationThread({
         onClick={onBack}
         className="self-start text-sm text-white/50 transition hover:text-white"
       >
-        &larr; New Conversation
+        &larr; Back to conversations
       </button>
 
       <div className="flex flex-col gap-3">

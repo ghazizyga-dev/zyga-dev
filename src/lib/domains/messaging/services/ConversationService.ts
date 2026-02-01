@@ -3,6 +3,8 @@ import {
   createConversation,
   getConversation,
   listConversations,
+  touchConversation,
+  findConversationByContact,
   addMessage,
   getConversationMessages,
 } from "../actions";
@@ -20,6 +22,12 @@ export const ConversationService = {
 
   list: (ownerId: string) =>
     listConversations(conversationRepository, ownerId),
+
+  touch: (conversationId: number, ownerId: string) =>
+    touchConversation(conversationRepository, conversationId, ownerId),
+
+  findByContact: (contactId: number, ownerId: string) =>
+    findConversationByContact(conversationRepository, contactId, ownerId),
 
   getMessages: (conversationId: number) =>
     getConversationMessages(messageRepository, conversationId),

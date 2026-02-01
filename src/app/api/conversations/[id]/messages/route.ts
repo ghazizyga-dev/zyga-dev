@@ -96,6 +96,7 @@ async function handleCreateMessage(
       role: "contact",
       content,
     });
+    await ConversationService.touch(conversationId, currentUser.id);
     return Response.json(savedMessage, { status: 201 });
   }
 
@@ -140,6 +141,7 @@ async function handleCreateMessage(
     );
   }
 
+  await ConversationService.touch(conversationId, currentUser.id);
   return Response.json(draftResult, { status: 201 });
 }
 
