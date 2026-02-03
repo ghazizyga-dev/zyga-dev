@@ -4,4 +4,5 @@ export type {
   DraftRequest,
   DraftResult,
   TokenUsage,
+  UserAiContext,
 } from "./DraftTypes";

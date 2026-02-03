@@ -1,16 +1,16 @@
 import { z } from "zod";
 
-import { IamService } from "~/lib/domains/iam";
+import { IamService, getEffectiveToneOfVoice } from "~/lib/domains/iam";
 import { ContactService } from "~/lib/domains/prospect";
 import { ConversationService } from "~/lib/domains/messaging";
-import type { ContactInfo } from "~/lib/domains/messaging";
+import type { ContactInfo, UserAiContext } from "~/lib/domains/messaging";
 import { withApiLogging } from "~/lib/logging";
 import { resolveSessionUserId } from "~/server/better-auth";
 import { generateDraftWithBilling } from "./_generateDraftWithBilling";
 
 const createConversationSchema = z.object({
   contactId: z.number().int().positive(),
-  sellingContext: z.string().min(1),
+  sellingContext: z.string().optional().default(""),
 });
 
 async function handleListConversations() {
@@ -89,10 +89,17 @@ async function handleCreateConversation(request: Request) {
     jobTitle: contact.jobTitle,
   };
 
+  const aiPreferences = await IamService.getAiPreferences(currentUser.id);
+  const userAiContext: UserAiContext = {
+    companyKnowledge: aiPreferences?.companyKnowledge ?? "",
+    toneOfVoice: aiPreferences ? getEffectiveToneOfVoice(aiPreferences) : "",
+    exampleMessages: aiPreferences?.exampleMessages ?? [],
+  };
+
   const draftResult = await generateDraftWithBilling(
     currentUser.id,
     createdConversation.id,
-    { contactInfo, sellingContext, conversationHistory: [] },
+    { contactInfo, userAiContext, conversationHistory: [] },
   );
 
   await ConversationService.touch(createdConversation.id, currentUser.id);

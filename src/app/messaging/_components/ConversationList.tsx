@@ -9,7 +9,6 @@ interface ConversationContact {
 interface ConversationListItem {
   id: number;
   contactId: number;
-  sellingContext: string;
   contact: ConversationContact | null;
 }
 
@@ -47,7 +46,7 @@ export function ConversationList({
             <button
               key={conversation.id}
               onClick={() => onOpenConversation(conversation.id)}
-              className="flex flex-col gap-1 rounded-lg bg-white/10 px-4 py-3 text-left transition hover:bg-white/20"
+              className="rounded-lg bg-white/10 px-4 py-3 text-left transition hover:bg-white/20"
             >
               <span className="font-medium">
                 {conversation.contact
@@ -56,9 +55,6 @@ export function ConversationList({
                 {conversation.contact?.company && (
                   <span className="text-white/50"> ({conversation.contact.company})</span>
                 )}
-              </span>
-              <span className="line-clamp-1 text-sm text-white/50">
-                {conversation.sellingContext}
               </span>
             </button>
           ))}

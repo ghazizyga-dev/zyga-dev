@@ -12,6 +12,7 @@ Next.js App Router frontend layer. Contains pages, layouts, and UI components.
 
 - **_components/** — Shared UI components
 - **api/** — Next.js API routes (auth handlers)
+- **contacts/** — Contacts management page and components 
 
 ## Constraints
 

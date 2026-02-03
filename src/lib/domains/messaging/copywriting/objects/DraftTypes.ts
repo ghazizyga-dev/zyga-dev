@@ -10,9 +10,15 @@ export interface ConversationMessage {
   content: string;
 }
 
+export interface UserAiContext {
+  companyKnowledge: string;
+  toneOfVoice: string;
+  exampleMessages: string[];
+}
+
 export interface DraftRequest {
   contactInfo: ContactInfo;
-  sellingContext: string;
+  userAiContext: UserAiContext;
   conversationHistory: ConversationMessage[];
 }
 

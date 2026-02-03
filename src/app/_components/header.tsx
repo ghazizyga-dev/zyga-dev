@@ -51,6 +51,12 @@ export function Header({ userName, userImage, remainingCredits }: HeaderProps) {
       <div className="flex items-center gap-4">
         <span className="text-sm text-white/70">{remainingCredits} credits</span>
         <UserAvatar userName={userName} userImage={userImage} />
+        <Link
+          href="/settings"
+          className="text-sm text-white/70 transition hover:text-white"
+        >
+          Settings
+        </Link>
         <SignOutButton />
       </div>
     </header>

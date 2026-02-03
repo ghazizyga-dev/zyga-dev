@@ -3,6 +3,7 @@ import {
   boolean,
   index,
   integer,
+  jsonb,
   pgTable,
   pgTableCreator,
   text,
@@ -201,4 +202,31 @@ export const conversationRelations = relations(conversation, ({ one, many }) => 
 
 export const messageRelations = relations(message, ({ one }) => ({
   conversation: one(conversation, { fields: [message.conversationId], references: [conversation.id] }),
+}));
+
+export const aiPreferences = createTable(
+  "ai_preferences",
+  (col) => ({
+    id: col.integer().primaryKey().generatedByDefaultAsIdentity(),
+    userId: col
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    companyKnowledge: col.text(),
+    toneOfVoice: col.text(),
+    exampleMessages: jsonb("example_messages").$type<string[]>(),
+    onboardingCompleted: col.integer().default(0).notNull(),
+    createdAt: col
+      .timestamp({ withTimezone: true })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: col.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+  }),
+  (table) => [
+    uniqueIndex("ai_preferences_user_idx").on(table.userId),
+  ],
+);
+
+export const aiPreferencesRelations = relations(aiPreferences, ({ one }) => ({
+  user: one(user, { fields: [aiPreferences.userId], references: [user.id] }),
 }));

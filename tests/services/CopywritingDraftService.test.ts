@@ -32,7 +32,11 @@ const baseRequest: DraftRequest = {
     company: null,
     jobTitle: null,
   },
-  sellingContext: "Selling SaaS product",
+  userAiContext: {
+    companyKnowledge: "We sell enterprise SaaS products for workflow automation.",
+    toneOfVoice: "Professional yet friendly, concise and value-focused.",
+    exampleMessages: [],
+  },
   conversationHistory: [],
 };
 
@@ -120,13 +124,39 @@ describe("CopywritingDraftService.generateDraft", () => {
       expect(callArgs.system).not.toContain("Company:");
     });
 
-    it("includes selling context in system prompt", async () => {
+    it("includes company knowledge in system prompt", async () => {
       mockCreate.mockResolvedValue(makeTextResponse("Hello"));
 
       await repository.generateDraft(baseRequest);
 
       const callArgs = mockCreate.mock.calls[0]![0] as { system: string };
-      expect(callArgs.system).toContain("Selling SaaS product");
+      expect(callArgs.system).toContain("We sell enterprise SaaS products for workflow automation.");
+    });
+
+    it("includes tone of voice in system prompt", async () => {
+      mockCreate.mockResolvedValue(makeTextResponse("Hello"));
+
+      await repository.generateDraft(baseRequest);
+
+      const callArgs = mockCreate.mock.calls[0]![0] as { system: string };
+      expect(callArgs.system).toContain("Professional yet friendly, concise and value-focused.");
+    });
+
+    it("includes example messages when provided", async () => {
+      mockCreate.mockResolvedValue(makeTextResponse("Hello"));
+
+      await repository.generateDraft({
+        ...baseRequest,
+        userAiContext: {
+          ...baseRequest.userAiContext,
+          exampleMessages: ["Hi there! I noticed you're looking for solutions.", "Hope this helps with your workflow needs."],
+        },
+      });
+
+      const callArgs = mockCreate.mock.calls[0]![0] as { system: string };
+      expect(callArgs.system).toContain("Example Messages");
+      expect(callArgs.system).toContain("Hi there! I noticed you're looking for solutions.");
+      expect(callArgs.system).toContain("Hope this helps with your workflow needs.");
     });
   });
 

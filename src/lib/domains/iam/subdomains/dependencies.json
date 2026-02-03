@@ -1,4 +1,4 @@
 {
   "type": "router",
-  "subsystems": ["./billing"]
+  "subsystems": ["./billing", "./ai-preferences"]
 }

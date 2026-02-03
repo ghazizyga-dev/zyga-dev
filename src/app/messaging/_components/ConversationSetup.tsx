@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import posthog from "posthog-js";
 
@@ -19,9 +20,13 @@ interface ConversationContact {
 interface EnrichedConversation {
   id: number;
   contactId: number;
-  sellingContext: string;
   createdAt: string;
   contact: ConversationContact | null;
+}
+
+interface OnboardingStatus {
+  completed: boolean;
+  hasCompanyKnowledge: boolean;
 }
 
 interface ConversationSetupProps {
@@ -37,9 +42,10 @@ export function ConversationSetup({
 }: ConversationSetupProps) {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [selectedContactId, setSelectedContactId] = useState<number | "">("");
-  const [sellingContext, setSellingContext] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingContacts, setIsLoadingContacts] = useState(true);
+  const [onboardingStatus, setOnboardingStatus] = useState<OnboardingStatus | null>(null);
+  const [isLoadingOnboarding, setIsLoadingOnboarding] = useState(true);
 
   useEffect(() => {
     async function fetchContacts() {
@@ -55,6 +61,22 @@ export function ConversationSetup({
     void fetchContacts();
   }, []);
 
+  useEffect(() => {
+    async function fetchOnboardingStatus() {
+      try {
+        const response = await fetch("/api/onboarding");
+        if (response.ok) {
+          setOnboardingStatus((await response.json()) as OnboardingStatus);
+        }
+      } catch {
+        // Silently fail
+      } finally {
+        setIsLoadingOnboarding(false);
+      }
+    }
+    void fetchOnboardingStatus();
+  }, []);
+
   const matchingConversation =
     selectedContactId !== ""
       ? existingConversations.find((conversation) => conversation.contactId === selectedContactId)
@@ -62,20 +84,19 @@ export function ConversationSetup({
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (!selectedContactId || !sellingContext.trim()) return;
+    if (!selectedContactId) return;
     setIsLoading(true);
     try {
       const response = await fetch("/api/conversations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contactId: selectedContactId, sellingContext }),
+        body: JSON.stringify({ contactId: selectedContactId }),
       });
       if (!response.ok) throw new Error("Failed to create conversation");
       const conversationResponse = (await response.json()) as { conversation: { id: number } };
 
       posthog.capture("conversation_started", {
         contact_id: selectedContactId,
-        selling_context_length: sellingContext.trim().length,
       });
 
       onConversationCreated(conversationResponse.conversation.id);
@@ -87,21 +108,57 @@ export function ConversationSetup({
     }
   }
 
-  if (isLoadingContacts)
-    return <p className="text-white/50">Loading contacts...</p>;
+  const isInitialLoading = isLoadingContacts || isLoadingOnboarding;
+  const needsCompanyKnowledge = onboardingStatus && !onboardingStatus.hasCompanyKnowledge;
+
+  if (isInitialLoading)
+    return <p className="text-white/50">Loading...</p>;
   if (contacts.length === 0)
     return (
       <p className="text-white/50">No contacts yet. Add contacts first.</p>
     );
 
+  if (needsCompanyKnowledge) {
+    return (
+      <div className="flex w-full max-w-md flex-col gap-4">
+        <button
+          onClick={onBack}
+          className="self-start text-sm text-white/50 transition hover:text-white"
+        >
+          &larr; Back to conversations
+        </button>
+
+        <div className="rounded-lg bg-purple-500/10 px-6 py-5 text-center">
+          <p className="mb-4 text-white/80">
+            Before starting a conversation, you need to set up your company information.
+          </p>
+          <Link
+            href="/settings"
+            className="inline-block rounded-lg bg-purple-600 px-4 py-2 font-medium transition hover:bg-purple-500"
+          >
+            Set up in Settings
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex w-full max-w-md flex-col gap-4">
-      <button
-        onClick={onBack}
-        className="self-start text-sm text-white/50 transition hover:text-white"
-      >
-        &larr; Back to conversations
-      </button>
+      <div className="flex items-center justify-between">
+        <button
+          onClick={onBack}
+          className="text-sm text-white/50 transition hover:text-white"
+        >
+          &larr; Back to conversations
+        </button>
+        <Link
+          href="/settings"
+          className="text-sm text-white/50 transition hover:text-white"
+        >
+          Customize AI in Settings
+        </Link>
+      </div>
 
       <form
         onSubmit={handleSubmit}
@@ -143,23 +200,9 @@ export function ConversationSetup({
           </div>
         )}
 
-        <div className="flex flex-col gap-2">
-          <label htmlFor="selling-context" className="text-sm font-medium">
-            Selling Context
-          </label>
-          <textarea
-            id="selling-context"
-            value={sellingContext}
-            onChange={(event) => setSellingContext(event.target.value)}
-            placeholder="Describe what you're selling and why this contact would be interested..."
-            className="rounded-lg bg-white/10 px-4 py-2 text-white placeholder:text-white/30"
-            rows={4}
-            required
-          />
-        </div>
         <button
           type="submit"
-          disabled={isLoading || !selectedContactId || !sellingContext.trim()}
+          disabled={isLoading || !selectedContactId}
           className="rounded-lg bg-purple-600 px-4 py-2 font-medium transition hover:bg-purple-500 disabled:opacity-50"
         >
           {isLoading ? "Generating First Message..." : "Generate First Message"}

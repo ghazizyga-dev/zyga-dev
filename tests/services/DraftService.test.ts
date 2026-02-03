@@ -79,7 +79,11 @@ const baseDraftRequest: DraftRequest = {
     company: null,
     jobTitle: null,
   },
-  sellingContext: "Selling SaaS product",
+  userAiContext: {
+    companyKnowledge: "We sell enterprise SaaS products.",
+    toneOfVoice: "Professional and concise.",
+    exampleMessages: [],
+  },
   conversationHistory: [],
 };
 

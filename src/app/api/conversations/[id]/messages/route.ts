@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-import { IamService } from "~/lib/domains/iam";
+import { IamService, getEffectiveToneOfVoice, DEFAULT_TONE_OF_VOICE } from "~/lib/domains/iam";
 import { ContactService } from "~/lib/domains/prospect";
 import { ConversationService } from "~/lib/domains/messaging";
-import type { ContactInfo, ConversationMessage } from "~/lib/domains/messaging";
+import type { ContactInfo, ConversationMessage, UserAiContext } from "~/lib/domains/messaging";
 import { withApiLogging } from "~/lib/logging";
 import { resolveSessionUserId } from "~/server/better-auth";
 import { generateDraftWithBilling } from "../../_generateDraftWithBilling";
@@ -124,12 +124,19 @@ async function handleCreateMessage(
     }),
   );
 
+  const aiPreferences = await IamService.getAiPreferences(currentUser.id);
+  const userAiContext: UserAiContext = {
+    companyKnowledge: aiPreferences?.companyKnowledge ?? "",
+    toneOfVoice: aiPreferences ? getEffectiveToneOfVoice(aiPreferences) : DEFAULT_TONE_OF_VOICE,
+    exampleMessages: aiPreferences?.exampleMessages ?? [],
+  };
+
   const draftResult = await generateDraftWithBilling(
     currentUser.id,
     conversationId,
     {
       contactInfo,
-      sellingContext: foundConversation.sellingContext,
+      userAiContext,
       conversationHistory,
     },
   );

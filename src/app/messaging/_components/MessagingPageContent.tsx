@@ -15,7 +15,6 @@ interface ConversationContact {
 interface EnrichedConversation {
   id: number;
   contactId: number;
-  sellingContext: string;
   createdAt: string;
   contact: ConversationContact | null;
 }

@@ -7,7 +7,11 @@ export class DrizzleConversationRepository implements ConversationRepository {
   async create(ownerId: string, input: ConversationCreateInput): Promise<Conversation> {
     const [insertedConversation] = await db
       .insert(conversation)
-      .values({ ...input, ownerId })
+      .values({
+        contactId: input.contactId,
+        sellingContext: input.sellingContext ?? "",
+        ownerId,
+      })
       .returning();
     return insertedConversation!;
   }

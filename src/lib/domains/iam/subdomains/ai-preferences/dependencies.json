@@ -1,0 +1,5 @@
+{
+  "type": "domain",
+  "allowed": [],
+  "subsystems": ["./objects", "./repositories", "./actions", "./services"]
+}

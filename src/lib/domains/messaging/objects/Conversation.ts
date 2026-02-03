@@ -9,5 +9,5 @@ export interface Conversation {
 
 export interface ConversationCreateInput {
   contactId: number;
-  sellingContext: string;
+  sellingContext?: string;
 }

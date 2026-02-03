@@ -1,0 +1,5 @@
+{
+  "type": "api",
+  "allowed": ["~/lib/domains/iam", "~/lib/logging", "~/server/better-auth", "zod"],
+  "subsystems": ["./complete", "./state"]
+}

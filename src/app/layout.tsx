@@ -6,6 +6,7 @@ import { Geist } from "next/font/google";
 import { IamService } from "~/lib/domains/iam";
 import { Header } from "~/app/_components/header";
 import { LandingPage } from "~/app/_components/landing-page";
+import { OnboardingGuard } from "~/app/_components/onboarding-guard";
 
 export const metadata: Metadata = {
   title: "Ai Boilerplate",
@@ -38,12 +39,14 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${geist.variable}`}>
       <body className="bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <Header
-          userName={currentUser.name}
-          userImage={currentUser.image ?? null}
-          remainingCredits={remainingCredits}
-        />
-        {children}
+        <OnboardingGuard>
+          <Header
+            userName={currentUser.name}
+            userImage={currentUser.image ?? null}
+            remainingCredits={remainingCredits}
+          />
+          {children}
+        </OnboardingGuard>
       </body>
     </html>
   );
