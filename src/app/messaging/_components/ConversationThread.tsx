@@ -59,33 +59,36 @@ export function ConversationThread({
 
     const savedMessage = (await response.json()) as Message;
     setMessages((previousMessages) => [...previousMessages, savedMessage]);
+
+    // Automatically generate AI reply (errors handled separately)
+    setIsGenerating(true);
+    try {
+      await handleGenerateReply();
+    } catch {
+      alert("Failed to generate AI reply. Please try again.");
+    } finally {
+      setIsGenerating(false);
+    }
   }
 
   async function handleGenerateReply() {
-    setIsGenerating(true);
-    try {
-      const response = await fetch(
-        `/api/conversations/${conversationId}/messages`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ role: "prospect" }),
-        },
-      );
+    const response = await fetch(
+      `/api/conversations/${conversationId}/messages`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: "prospect" }),
+      },
+    );
 
-      if (!response.ok) throw new Error("Failed to generate reply");
+    if (!response.ok) throw new Error("Failed to generate reply");
 
-      const refreshResponse = await fetch(
-        `/api/conversations/${conversationId}/messages`,
-      );
-      if (refreshResponse.ok) {
-        const messagesData = (await refreshResponse.json()) as Message[];
-        setMessages(messagesData);
-      }
-    } catch {
-      alert("Failed to generate reply. Please try again.");
-    } finally {
-      setIsGenerating(false);
+    const refreshResponse = await fetch(
+      `/api/conversations/${conversationId}/messages`,
+    );
+    if (refreshResponse.ok) {
+      const messagesData = (await refreshResponse.json()) as Message[];
+      setMessages(messagesData);
     }
   }
 
@@ -110,8 +113,7 @@ export function ConversationThread({
 
       <ContactResponseInput
         onSubmit={handleContactResponse}
-        onGenerateReply={handleGenerateReply}
-        isGenerating={isGenerating}
+        isProcessing={isGenerating}
       />
     </div>
   );

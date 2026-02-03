@@ -3,12 +3,25 @@ import { db, aiPreferences } from "~/server/db";
 import type { AiPreferencesRepository } from "../../AiPreferencesRepository";
 import type { AiPreferences as AiPreferencesType, AiPreferencesInput } from "../../../objects";
 
+function parseExampleMessages(value: string | null): string[] {
+  if (!value) return [];
+  try {
+    const parsed: unknown = JSON.parse(value);
+    if (Array.isArray(parsed)) {
+      return parsed.filter((item): item is string => typeof item === "string");
+    }
+    return [];
+  } catch {
+    return [];
+  }
+}
+
 function toAiPreferences(row: typeof aiPreferences.$inferSelect): AiPreferencesType {
   return {
     userId: row.userId,
     companyKnowledge: row.companyKnowledge,
     toneOfVoice: row.toneOfVoice,
-    exampleMessages: row.exampleMessages ?? [],
+    exampleMessages: parseExampleMessages(row.exampleMessages),
     onboardingCompleted: row.onboardingCompleted === 1,
   };
 }
@@ -26,13 +39,15 @@ export class DrizzleAiPreferencesRepository implements AiPreferencesRepository {
   }
 
   async upsert(userId: string, input: AiPreferencesInput): Promise<AiPreferencesType> {
+    const exampleMessagesJson = input.exampleMessages ? JSON.stringify(input.exampleMessages) : null;
+
     const rows = await db
       .insert(aiPreferences)
       .values({
         userId,
         companyKnowledge: input.companyKnowledge ?? null,
         toneOfVoice: input.toneOfVoice ?? null,
-        exampleMessages: input.exampleMessages ?? null,
+        exampleMessages: exampleMessagesJson,
         createdAt: new Date(),
       })
       .onConflictDoUpdate({
@@ -40,7 +55,7 @@ export class DrizzleAiPreferencesRepository implements AiPreferencesRepository {
         set: {
           ...(input.companyKnowledge !== undefined && { companyKnowledge: input.companyKnowledge }),
           ...(input.toneOfVoice !== undefined && { toneOfVoice: input.toneOfVoice }),
-          ...(input.exampleMessages !== undefined && { exampleMessages: input.exampleMessages }),
+          ...(input.exampleMessages !== undefined && { exampleMessages: exampleMessagesJson }),
         },
       })
       .returning();

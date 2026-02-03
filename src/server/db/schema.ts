@@ -3,7 +3,6 @@ import {
   boolean,
   index,
   integer,
-  jsonb,
   pgTable,
   pgTableCreator,
   text,
@@ -214,7 +213,7 @@ export const aiPreferences = createTable(
       .references(() => user.id, { onDelete: "cascade" }),
     companyKnowledge: col.text(),
     toneOfVoice: col.text(),
-    exampleMessages: jsonb("example_messages").$type<string[]>(),
+    exampleMessages: col.text(),
     onboardingCompleted: col.integer().default(0).notNull(),
     createdAt: col
       .timestamp({ withTimezone: true })
