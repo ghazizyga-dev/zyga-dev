@@ -192,6 +192,9 @@ export function ImportFromLinkedIn({
   }
 
   function handleCancel() {
+    if (state === "loading" || state === "submitting") {
+      return;
+    }
     resetFormState();
     onCancel?.();
   }
@@ -230,7 +233,8 @@ export function ImportFromLinkedIn({
           <button
             type="button"
             onClick={handleCancel}
-            className="rounded-full bg-white/10 px-6 py-2 font-semibold transition hover:bg-white/20"
+            disabled={state === "loading"}
+            className="rounded-full bg-white/10 px-6 py-2 font-semibold transition hover:bg-white/20 disabled:opacity-50"
           >
             Cancel
           </button>
@@ -372,7 +376,8 @@ export function ImportFromLinkedIn({
         <button
           type="button"
           onClick={handleCancel}
-          className="rounded-full bg-white/10 px-6 py-2 font-semibold transition hover:bg-white/20"
+          disabled={state === "submitting"}
+          className="rounded-full bg-white/10 px-6 py-2 font-semibold transition hover:bg-white/20 disabled:opacity-50"
         >
           Cancel
         </button>
