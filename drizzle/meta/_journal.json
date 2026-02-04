@@ -50,6 +50,13 @@
       "when": 1770160896252,
       "tag": "0006_same_kree",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1770229905614,
+      "tag": "0007_lonely_cyclops",
+      "breakpoints": true
     }
   ]
 }

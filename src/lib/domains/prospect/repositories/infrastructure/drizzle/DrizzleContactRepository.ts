@@ -40,6 +40,20 @@ export class DrizzleContactRepository implements ContactRepository {
     return foundContact ?? null;
   }
 
+  async findByLinkedinProviderId(
+    linkedinProviderId: string,
+    ownerId: string,
+  ): Promise<Contact | null> {
+    const foundContact = await db.query.contact.findFirst({
+      where: and(
+        eq(contact.linkedinProviderId, linkedinProviderId),
+        eq(contact.ownerId, ownerId),
+      ),
+    });
+
+    return foundContact ?? null;
+  }
+
   async findAllByOwner(ownerId: string): Promise<Contact[]> {
     const contactList = await db.query.contact.findMany({
       where: eq(contact.ownerId, ownerId),

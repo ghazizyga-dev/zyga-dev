@@ -1,25 +1,21 @@
 import { z } from "zod";
 
-import { ContactService } from "~/lib/domains/prospect";
+import { CompanyService } from "~/lib/domains/prospect";
 import { IamService } from "~/lib/domains/iam";
 import { withApiLogging } from "~/lib/logging";
 import { resolveSessionUserId } from "~/server/better-auth";
 
-const createContactSchema = z.object({
-  firstName: z.string().min(1),
-  lastName: z.string().min(1),
-  email: z.string().email().optional(),
-  company: z.string().optional(),
-  jobTitle: z.string().optional(),
-  phone: z.string().optional(),
-  notes: z.string().optional(),
+const createCompanySchema = z.object({
+  name: z.string().min(1),
   linkedinProviderId: z.string().optional(),
   linkedinUrl: z.string().url().optional(),
-  companyId: z.number().optional(),
+  industry: z.string().optional(),
+  size: z.string().optional(),
+  website: z.string().url().optional(),
 });
 
 const handlers = withApiLogging(
-  "/api/contacts",
+  "/api/companies",
   {
     GET: async () => {
       const currentUser = await IamService.getCurrentUser();
@@ -27,8 +23,8 @@ const handlers = withApiLogging(
         return Response.json({ error: "Unauthorized" }, { status: 401 });
       }
 
-      const contacts = await ContactService.list(currentUser.id);
-      return Response.json(contacts);
+      const companies = await CompanyService.list(currentUser.id);
+      return Response.json(companies);
     },
 
     POST: async (request: Request) => {
@@ -38,7 +34,7 @@ const handlers = withApiLogging(
       }
 
       const body: unknown = await request.json();
-      const parseResult = createContactSchema.safeParse(body);
+      const parseResult = createCompanySchema.safeParse(body);
       if (!parseResult.success) {
         return Response.json(
           { error: parseResult.error.flatten() },
@@ -46,12 +42,12 @@ const handlers = withApiLogging(
         );
       }
 
-      const createdContact = await ContactService.create(
+      const createdCompany = await CompanyService.create(
         currentUser.id,
         parseResult.data,
       );
 
-      return Response.json(createdContact, { status: 201 });
+      return Response.json(createdCompany, { status: 201 });
     },
   },
   resolveSessionUserId,

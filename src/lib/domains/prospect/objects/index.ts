@@ -3,3 +3,9 @@ export type {
   ContactCreateInput,
   ContactUpdateInput,
 } from "./Contact";
+
+export type {
+  Company,
+  CompanyCreateInput,
+  CompanyUpdateInput,
+} from "./Company";

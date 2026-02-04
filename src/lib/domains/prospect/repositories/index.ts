@@ -1,2 +1,3 @@
 export type { ContactRepository } from "./ContactRepository";
-export { DrizzleContactRepository } from "./infrastructure";
+export type { CompanyRepository } from "./CompanyRepository";
+export { DrizzleContactRepository, DrizzleCompanyRepository } from "./infrastructure";

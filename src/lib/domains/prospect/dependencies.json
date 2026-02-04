@@ -1,5 +1,5 @@
 {
   "type": "domain",
   "allowed": ["~/lib/logging"],
-  "subsystems": ["./objects", "./repositories", "./actions", "./services"]
+  "subsystems": ["./objects", "./repositories", "./actions", "./services", "./linkedin-enrichment"]
 }

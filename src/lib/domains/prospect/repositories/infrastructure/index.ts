@@ -1,1 +1,1 @@
-export { DrizzleContactRepository } from "./drizzle";
+export { DrizzleContactRepository, DrizzleCompanyRepository } from "./drizzle";

@@ -17,6 +17,14 @@ export async function getContactById(
   return repository.findByIdAndOwner(contactId, ownerId);
 }
 
+export async function getContactByLinkedinProviderId(
+  repository: ContactRepository,
+  linkedinProviderId: string,
+  ownerId: string,
+) {
+  return repository.findByLinkedinProviderId(linkedinProviderId, ownerId);
+}
+
 export async function listContacts(
   repository: ContactRepository,
   ownerId: string,

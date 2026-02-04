@@ -18,12 +18,13 @@ const EMPTY_FORM = {
 
 interface CreateContactFormProps {
   onContactCreated: () => void;
+  onCancel?: () => void;
 }
 
 export function CreateContactForm({
   onContactCreated,
+  onCancel,
 }: CreateContactFormProps) {
-  const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [formData, setFormData] = useState(EMPTY_FORM);
@@ -66,7 +67,6 @@ export function CreateContactForm({
 
       setFormData(EMPTY_FORM);
       setErrorMessage(null);
-      setIsOpen(false);
       onContactCreated();
     } catch (error) {
       posthog.captureException(error);
@@ -76,20 +76,10 @@ export function CreateContactForm({
     }
   }
 
-  function handleOpenForm() {
-    posthog.capture("contact_form_opened");
-    setIsOpen(true);
-  }
-
-  if (!isOpen) {
-    return (
-      <button
-        onClick={handleOpenForm}
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
-      >
-        New Contact
-      </button>
-    );
+  function handleCancel() {
+    setFormData(EMPTY_FORM);
+    setErrorMessage(null);
+    onCancel?.();
   }
 
   return (
@@ -112,11 +102,7 @@ export function CreateContactForm({
         </button>
         <button
           type="button"
-          onClick={() => {
-            setFormData(EMPTY_FORM);
-            setErrorMessage(null);
-            setIsOpen(false);
-          }}
+          onClick={handleCancel}
           className="rounded-full bg-white/10 px-6 py-2 font-semibold transition hover:bg-white/20"
         >
           Cancel

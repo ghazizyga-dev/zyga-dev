@@ -1,4 +1,5 @@
 {
   "type": "api",
-  "allowed": ["~/lib/domains/iam", "~/lib/domains/prospect", "~/lib/logging", "~/server/better-auth", "zod"]
+  "allowed": ["~/lib/domains/iam", "~/lib/domains/prospect", "~/lib/logging", "~/server/better-auth", "zod"],
+  "subsystems": ["./companies", "./linkedin-preview"]
 }

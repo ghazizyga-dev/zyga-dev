@@ -106,6 +106,35 @@ export const sessionRelations = relations(session, ({ one }) => ({
   user: one(user, { fields: [session.userId], references: [user.id] }),
 }));
 
+export const company = createTable(
+  "company",
+  (d) => ({
+    id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
+    name: d.varchar({ length: 200 }).notNull(),
+    linkedinProviderId: d.varchar({ length: 100 }),
+    linkedinUrl: d.varchar({ length: 500 }),
+    industry: d.varchar({ length: 150 }),
+    size: d.varchar({ length: 50 }),
+    website: d.varchar({ length: 500 }),
+    ownerId: d
+      .varchar({ length: 255 })
+      .notNull()
+      .references(() => user.id),
+    createdAt: d
+      .timestamp({ withTimezone: true })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+  }),
+  (t) => [
+    index("company_owner_idx").on(t.ownerId),
+    uniqueIndex("company_linkedin_provider_owner_idx").on(
+      t.linkedinProviderId,
+      t.ownerId,
+    ),
+  ],
+);
+
 export const contact = createTable(
   "contact",
   (d) => ({
@@ -117,6 +146,9 @@ export const contact = createTable(
     jobTitle: d.varchar({ length: 150 }),
     phone: d.varchar({ length: 50 }),
     notes: d.text(),
+    linkedinProviderId: d.varchar({ length: 100 }),
+    linkedinUrl: d.varchar({ length: 500 }),
+    companyId: d.integer().references(() => company.id),
     ownerId: d
       .varchar({ length: 255 })
       .notNull()
@@ -127,7 +159,13 @@ export const contact = createTable(
       .notNull(),
     updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
   }),
-  (t) => [index("contact_owner_idx").on(t.ownerId)],
+  (t) => [
+    index("contact_owner_idx").on(t.ownerId),
+    uniqueIndex("contact_linkedin_provider_owner_idx").on(
+      t.linkedinProviderId,
+      t.ownerId,
+    ),
+  ],
 );
 
 export const conversation = createTable(
@@ -194,6 +232,16 @@ export const creditBalance = createTable(
     uniqueIndex("pg-drizzle_credit_balance_user_period_uniq").on(t.userId, t.periodStart, t.periodEnd),
   ],
 );
+
+export const companyRelations = relations(company, ({ one, many }) => ({
+  owner: one(user, { fields: [company.ownerId], references: [user.id] }),
+  contacts: many(contact),
+}));
+
+export const contactRelations = relations(contact, ({ one }) => ({
+  owner: one(user, { fields: [contact.ownerId], references: [user.id] }),
+  companyRef: one(company, { fields: [contact.companyId], references: [company.id] }),
+}));
 
 export const conversationRelations = relations(conversation, ({ one, many }) => ({
   contact: one(contact, { fields: [conversation.contactId], references: [contact.id] }),

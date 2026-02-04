@@ -11,6 +11,10 @@ export interface ContactRepository {
     contactId: number,
     ownerId: string,
   ): Promise<Contact | null>;
+  findByLinkedinProviderId(
+    linkedinProviderId: string,
+    ownerId: string,
+  ): Promise<Contact | null>;
   findAllByOwner(ownerId: string): Promise<Contact[]>;
   update(
     contactId: number,

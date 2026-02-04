@@ -7,6 +7,9 @@ export interface Contact {
   jobTitle: string | null;
   phone: string | null;
   notes: string | null;
+  linkedinProviderId: string | null;
+  linkedinUrl: string | null;
+  companyId: number | null;
   ownerId: string;
   createdAt: Date;
   updatedAt: Date | null;
@@ -20,6 +23,9 @@ export interface ContactCreateInput {
   jobTitle?: string | null;
   phone?: string | null;
   notes?: string | null;
+  linkedinProviderId?: string | null;
+  linkedinUrl?: string | null;
+  companyId?: number | null;
 }
 
 export interface ContactUpdateInput {
@@ -30,4 +36,7 @@ export interface ContactUpdateInput {
   jobTitle?: string | null;
   phone?: string | null;
   notes?: string | null;
+  linkedinProviderId?: string | null;
+  linkedinUrl?: string | null;
+  companyId?: number | null;
 }

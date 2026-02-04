@@ -2,6 +2,7 @@ import { DrizzleContactRepository } from "../repositories";
 import {
   createContact,
   getContactById,
+  getContactByLinkedinProviderId,
   listContacts,
   updateContact,
   deleteContact,
@@ -16,6 +17,9 @@ export const ContactService = {
 
   getById: (contactId: number, ownerId: string) =>
     getContactById(contactRepository, contactId, ownerId),
+
+  getByLinkedinProviderId: (linkedinProviderId: string, ownerId: string) =>
+    getContactByLinkedinProviderId(contactRepository, linkedinProviderId, ownerId),
 
   list: (ownerId: string) => listContacts(contactRepository, ownerId),
 
