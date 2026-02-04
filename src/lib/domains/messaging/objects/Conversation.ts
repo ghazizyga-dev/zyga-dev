@@ -1,3 +1,8 @@
+export type ConversationStopReason =
+  | "positive_outcome"
+  | "unresponsive"
+  | "negative_outcome";
+
 export interface Conversation {
   id: number;
   contactId: number;
@@ -5,6 +10,8 @@ export interface Conversation {
   sellingContext: string;
   createdAt: Date;
   updatedAt: Date | null;
+  stoppedAt: Date | null;
+  stoppedReason: ConversationStopReason | null;
 }
 
 export interface ConversationCreateInput {

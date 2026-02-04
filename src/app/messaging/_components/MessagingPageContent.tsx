@@ -17,6 +17,7 @@ interface EnrichedConversation {
   contactId: number;
   createdAt: string;
   contact: ConversationContact | null;
+  stoppedAt: string | null;
 }
 
 type View = "list" | "setup" | "thread";

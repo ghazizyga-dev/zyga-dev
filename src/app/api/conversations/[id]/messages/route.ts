@@ -149,7 +149,12 @@ async function handleCreateMessage(
   }
 
   await ConversationService.touch(conversationId, currentUser.id);
-  return Response.json(draftResult, { status: 201 });
+
+  return Response.json({
+    content: draftResult.content,
+    stopped: draftResult.stopped,
+    stoppedReason: draftResult.stoppedReason,
+  }, { status: 201 });
 }
 
 const handlers = withApiLogging(

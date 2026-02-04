@@ -15,4 +15,16 @@ export const DraftService = {
     });
     return draftResult;
   },
+
+  generateDraftWithAnalysis: async (conversationId: number, request: DraftRequest) => {
+    const analysisResult = await CopywritingDraftService.analyzeAndDraft(request);
+    if (analysisResult.analysis.draftContent) {
+      await addMessage(messageRepository, {
+        conversationId,
+        role: "prospect",
+        content: analysisResult.analysis.draftContent,
+      });
+    }
+    return analysisResult;
+  },
 };

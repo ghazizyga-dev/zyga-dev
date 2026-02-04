@@ -13,6 +13,23 @@ interface Message {
   createdAt: string;
 }
 
+type ConversationStopReason = "positive_outcome" | "unresponsive" | "negative_outcome";
+
+interface ConversationData {
+  id: number;
+  stoppedAt: string | null;
+  stoppedReason: ConversationStopReason | null;
+}
+
+function getStopReasonMessage(reason: ConversationStopReason): string {
+  const messages: Record<ConversationStopReason, string> = {
+    positive_outcome: "Prospect showed interest - ready for manual follow-up",
+    unresponsive: "Prospect hasn't responded after multiple attempts",
+    negative_outcome: "Prospect declined - not interested",
+  };
+  return messages[reason];
+}
+
 interface ConversationThreadProps {
   conversationId: number;
   onBack: () => void;
@@ -23,18 +40,26 @@ export function ConversationThread({
   onBack,
 }: ConversationThreadProps) {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [conversation, setConversation] = useState<ConversationData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
 
+  const isStopped = conversation?.stoppedAt !== null && conversation?.stoppedAt !== undefined;
+
   useEffect(() => {
-    async function fetchMessages() {
+    async function fetchData() {
       try {
-        const response = await fetch(
-          `/api/conversations/${conversationId}/messages`,
-        );
-        if (response.ok) {
-          const messagesData = (await response.json()) as Message[];
+        const [messagesResponse, conversationResponse] = await Promise.all([
+          fetch(`/api/conversations/${conversationId}/messages`),
+          fetch(`/api/conversations/${conversationId}`),
+        ]);
+        if (messagesResponse.ok) {
+          const messagesData = (await messagesResponse.json()) as Message[];
           setMessages(messagesData);
+        }
+        if (conversationResponse.ok) {
+          const conversationData = (await conversationResponse.json()) as ConversationData;
+          setConversation(conversationData);
         }
       } catch {
         // Silently fail
@@ -42,7 +67,7 @@ export function ConversationThread({
         setIsLoading(false);
       }
     }
-    void fetchMessages();
+    void fetchData();
   }, [conversationId]);
 
   async function handleContactResponse(content: string) {
@@ -83,6 +108,21 @@ export function ConversationThread({
 
     if (!response.ok) throw new Error("Failed to generate reply");
 
+    const result = (await response.json()) as {
+      stopped?: boolean;
+      stoppedReason?: ConversationStopReason | null;
+    };
+
+    // If AI stopped, update conversation state
+    if (result.stopped && result.stoppedReason) {
+      setConversation((prev) =>
+        prev
+          ? { ...prev, stoppedAt: new Date().toISOString(), stoppedReason: result.stoppedReason! }
+          : prev,
+      );
+    }
+
+    // Refresh messages
     const refreshResponse = await fetch(
       `/api/conversations/${conversationId}/messages`,
     );
@@ -111,10 +151,17 @@ export function ConversationThread({
         ))}
       </div>
 
-      <ContactResponseInput
-        onSubmit={handleContactResponse}
-        isProcessing={isGenerating}
-      />
+      {isStopped && conversation?.stoppedReason ? (
+        <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/70">
+          <span className="font-medium">Conversation ended:</span>{" "}
+          {getStopReasonMessage(conversation.stoppedReason)}
+        </div>
+      ) : (
+        <ContactResponseInput
+          onSubmit={handleContactResponse}
+          isProcessing={isGenerating}
+        />
+      )}
     </div>
   );
 }

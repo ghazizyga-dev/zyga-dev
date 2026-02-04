@@ -143,6 +143,8 @@ export const conversation = createTable(
       .notNull()
       .references(() => user.id),
     sellingContext: d.text().notNull(),
+    stoppedAt: d.timestamp({ withTimezone: true }),
+    stoppedReason: d.varchar({ length: 50 }),
     createdAt: d
       .timestamp({ withTimezone: true })
       .$defaultFn(() => new Date())

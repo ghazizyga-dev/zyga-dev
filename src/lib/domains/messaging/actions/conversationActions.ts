@@ -1,5 +1,5 @@
 import type { ConversationRepository } from "../repositories";
-import type { ConversationCreateInput } from "../objects";
+import type { ConversationCreateInput, ConversationStopReason } from "../objects";
 
 export async function createConversation(
   repository: ConversationRepository,
@@ -38,4 +38,12 @@ export async function findConversationByContact(
   ownerId: string,
 ) {
   return repository.findByContactAndOwner(contactId, ownerId);
+}
+
+export async function stopConversation(
+  repository: ConversationRepository,
+  conversationId: number,
+  reason: ConversationStopReason,
+) {
+  return repository.stop(conversationId, reason);
 }

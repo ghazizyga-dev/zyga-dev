@@ -10,6 +10,7 @@ interface ConversationListItem {
   id: number;
   contactId: number;
   contact: ConversationContact | null;
+  stoppedAt: string | null;
 }
 
 interface ConversationListProps {
@@ -42,22 +43,32 @@ export function ConversationList({
         <p className="text-center text-white/50">No conversations yet. Start a new one!</p>
       ) : (
         <div className="flex flex-col gap-2">
-          {conversations.map((conversation) => (
-            <button
-              key={conversation.id}
-              onClick={() => onOpenConversation(conversation.id)}
-              className="rounded-lg bg-white/10 px-4 py-3 text-left transition hover:bg-white/20"
-            >
-              <span className="font-medium">
-                {conversation.contact
-                  ? `${conversation.contact.firstName} ${conversation.contact.lastName}`
-                  : `Contact #${conversation.contactId}`}
-                {conversation.contact?.company && (
-                  <span className="text-white/50"> ({conversation.contact.company})</span>
-                )}
-              </span>
-            </button>
-          ))}
+          {conversations.map((conversation) => {
+            const isStopped = conversation.stoppedAt !== null;
+            return (
+              <button
+                key={conversation.id}
+                onClick={() => onOpenConversation(conversation.id)}
+                className="rounded-lg bg-white/10 px-4 py-3 text-left transition hover:bg-white/20"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-medium">
+                    {conversation.contact
+                      ? `${conversation.contact.firstName} ${conversation.contact.lastName}`
+                      : `Contact #${conversation.contactId}`}
+                    {conversation.contact?.company && (
+                      <span className="text-white/50"> ({conversation.contact.company})</span>
+                    )}
+                  </span>
+                  {isStopped && (
+                    <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-white/50">
+                      Ended
+                    </span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

@@ -5,4 +5,16 @@ import { withLogging } from "~/lib/logging";
 export const ConversationService = withLogging("ConversationService", _ConversationService);
 export const DraftService = withLogging("DraftService", _DraftService);
 
-export type { ContactInfo, ConversationMessage, DraftRequest, DraftResult, UserAiContext } from "./copywriting";
+export type {
+  AnalysisAndDraftResult,
+  ContactInfo,
+  ConversationAnalysisResult,
+  ConversationMessage,
+  ConversationStatus,
+  DraftRequest,
+  DraftResult,
+  StopReason,
+  UserAiContext,
+} from "./copywriting";
+
+export type { ConversationStopReason } from "./objects";

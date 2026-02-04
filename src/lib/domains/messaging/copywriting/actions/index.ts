@@ -1,1 +1,1 @@
-export { draftMessage } from "./draftActions";
+export { analyzeAndDraftMessage, draftMessage } from "./draftActions";

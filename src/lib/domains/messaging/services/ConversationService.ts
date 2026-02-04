@@ -5,10 +5,11 @@ import {
   listConversations,
   touchConversation,
   findConversationByContact,
+  stopConversation,
   addMessage,
   getConversationMessages,
 } from "../actions";
-import type { ConversationCreateInput, MessageCreateInput } from "../objects";
+import type { ConversationCreateInput, ConversationStopReason, MessageCreateInput } from "../objects";
 
 const conversationRepository = new DrizzleConversationRepository();
 const messageRepository = new DrizzleMessageRepository();
@@ -34,4 +35,7 @@ export const ConversationService = {
 
   addContactResponse: (input: MessageCreateInput) =>
     addMessage(messageRepository, input),
+
+  stop: (conversationId: number, reason: ConversationStopReason) =>
+    stopConversation(conversationRepository, conversationId, reason),
 };
