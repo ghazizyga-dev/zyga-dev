@@ -116,11 +116,11 @@ export function ConversationThread({
 
     // If AI stopped, update conversation state (handle missing reason gracefully)
     if (result.stopped) {
-      setConversation((prev) =>
-        prev
-          ? { ...prev, stoppedAt: new Date().toISOString(), stoppedReason: result.stoppedReason ?? null }
-          : prev,
-      );
+      setConversation((prev) => ({
+        id: prev?.id ?? conversationId,
+        stoppedAt: new Date().toISOString(),
+        stoppedReason: result.stoppedReason ?? null,
+      }));
     }
 
     // Refresh messages

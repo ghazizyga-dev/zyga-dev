@@ -29,11 +29,19 @@ function buildContactInfo(contact: Contact): ContactInfo {
   };
 }
 
+const VALID_MESSAGE_ROLES = new Set(["prospect", "contact"]);
+
+function isValidMessageRole(role: string): role is "prospect" | "contact" {
+  return VALID_MESSAGE_ROLES.has(role);
+}
+
 function buildConversationHistory(messages: { role: string; content: string }[]): ConversationMessage[] {
-  return messages.map((message) => ({
-    role: message.role as "prospect" | "contact",
-    content: message.content,
-  }));
+  return messages
+    .filter((message) => isValidMessageRole(message.role))
+    .map((message) => ({
+      role: message.role as "prospect" | "contact",
+      content: message.content,
+    }));
 }
 
 async function buildUserAiContext(userId: string): Promise<UserAiContext> {
