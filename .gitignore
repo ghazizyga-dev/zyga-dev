@@ -48,3 +48,11 @@ test-results
 
 # python
 __pycache__/
+
+# claude skills
+.claude/skills/
+
+# chrome extension
+extension/node_modules
+extension/.wxt
+extension/.output

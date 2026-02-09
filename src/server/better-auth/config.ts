@@ -9,6 +9,9 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg", // or "pg" or "mysql"
   }),
+  trustedOrigins: env.CHROME_EXTENSION_ID
+    ? [`chrome-extension://${env.CHROME_EXTENSION_ID}`]
+    : [],
   emailAndPassword: {
     enabled: true,
   },

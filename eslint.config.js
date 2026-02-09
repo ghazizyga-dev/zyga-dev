@@ -7,7 +7,7 @@ import drizzle from "eslint-plugin-drizzle";
 export default tseslint.config(
   ...defineConfig([
     ...nextCoreWebVitals,
-    globalIgnores([".next/**"]),
+    globalIgnores([".next/**", "extension/**"]),
   ]),
   {
     files: ["**/*.ts", "**/*.tsx"],
