@@ -1,0 +1,1 @@
+export { CompanyPageContent } from "./CompanyPageContent";

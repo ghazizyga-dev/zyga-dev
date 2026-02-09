@@ -10,6 +10,7 @@ interface Contact {
   lastName: string;
   email: string | null;
   company: string | null;
+  companyId: number | null;
   jobTitle: string | null;
   phone: string | null;
   notes: string | null;

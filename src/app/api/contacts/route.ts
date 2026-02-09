@@ -21,10 +21,22 @@ const createContactSchema = z.object({
 const handlers = withApiLogging(
   "/api/contacts",
   {
-    GET: async () => {
+    GET: async (request: Request) => {
       const currentUser = await IamService.getCurrentUser();
       if (!currentUser) {
         return Response.json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+      const { searchParams } = new URL(request.url);
+      const companyIdParam = searchParams.get("companyId");
+
+      if (companyIdParam) {
+        const companyId = Number(companyIdParam);
+        if (Number.isNaN(companyId)) {
+          return Response.json({ error: "Invalid companyId" }, { status: 400 });
+        }
+        const contacts = await ContactService.listByCompany(companyId, currentUser.id);
+        return Response.json(contacts);
       }
 
       const contacts = await ContactService.list(currentUser.id);

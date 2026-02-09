@@ -12,6 +12,7 @@ interface Contact {
   lastName: string;
   email: string | null;
   company: string | null;
+  companyId: number | null;
   jobTitle: string | null;
   phone: string | null;
   notes: string | null;
@@ -76,7 +77,17 @@ export function ContactCard({ contact, onDeleted, onUpdated }: ContactCardProps)
         <div className="flex flex-col gap-1">
           <h3 className="text-xl font-bold">{fullName}</h3>
           {contact.jobTitle && <p className="text-sm text-white/70">{contact.jobTitle}</p>}
-          {contact.company && <p className="text-sm text-white/70">{contact.company}</p>}
+          {contact.company && (
+            <p className="text-sm text-white/70">
+              {contact.companyId ? (
+                <Link href={`/companies/${contact.companyId}`} className="hover:text-white hover:underline">
+                  {contact.company}
+                </Link>
+              ) : (
+                contact.company
+              )}
+            </p>
+          )}
           {contact.email && <p className="text-sm text-white/70">{contact.email}</p>}
           {contact.phone && <p className="text-sm text-white/70">{contact.phone}</p>}
           {contact.notes && <p className="mt-2 text-sm text-white/50 italic">{contact.notes}</p>}

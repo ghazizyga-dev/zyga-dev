@@ -3,6 +3,7 @@ export {
   getContactById,
   getContactByLinkedinProviderId,
   listContacts,
+  listContactsByCompany,
   updateContact,
   deleteContact,
 } from "./contactActions";

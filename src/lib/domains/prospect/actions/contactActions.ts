@@ -32,6 +32,14 @@ export async function listContacts(
   return repository.findAllByOwner(ownerId);
 }
 
+export async function listContactsByCompany(
+  repository: ContactRepository,
+  companyId: number,
+  ownerId: string,
+) {
+  return repository.findAllByCompanyAndOwner(companyId, ownerId);
+}
+
 export async function updateContact(
   repository: ContactRepository,
   contactId: number,

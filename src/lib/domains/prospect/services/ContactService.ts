@@ -4,6 +4,7 @@ import {
   getContactById,
   getContactByLinkedinProviderId,
   listContacts,
+  listContactsByCompany,
   updateContact,
   deleteContact,
 } from "../actions";
@@ -22,6 +23,9 @@ export const ContactService = {
     getContactByLinkedinProviderId(contactRepository, linkedinProviderId, ownerId),
 
   list: (ownerId: string) => listContacts(contactRepository, ownerId),
+
+  listByCompany: (companyId: number, ownerId: string) =>
+    listContactsByCompany(contactRepository, companyId, ownerId),
 
   update: (contactId: number, ownerId: string, input: ContactUpdateInput) =>
     updateContact(contactRepository, contactId, ownerId, input),

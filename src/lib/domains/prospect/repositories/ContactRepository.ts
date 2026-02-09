@@ -16,6 +16,7 @@ export interface ContactRepository {
     ownerId: string,
   ): Promise<Contact | null>;
   findAllByOwner(ownerId: string): Promise<Contact[]>;
+  findAllByCompanyAndOwner(companyId: number, ownerId: string): Promise<Contact[]>;
   update(
     contactId: number,
     input: ContactUpdateInput,

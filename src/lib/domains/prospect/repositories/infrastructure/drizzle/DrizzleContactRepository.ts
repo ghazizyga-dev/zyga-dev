@@ -62,6 +62,14 @@ export class DrizzleContactRepository implements ContactRepository {
     return contactList;
   }
 
+  async findAllByCompanyAndOwner(companyId: number, ownerId: string): Promise<Contact[]> {
+    const contactList = await db.query.contact.findMany({
+      where: and(eq(contact.companyId, companyId), eq(contact.ownerId, ownerId)),
+    });
+
+    return contactList;
+  }
+
   async update(
     contactId: number,
     input: ContactUpdateInput,
