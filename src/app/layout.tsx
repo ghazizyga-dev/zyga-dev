@@ -38,7 +38,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={`${geist.variable}`}>
-      <body className="bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+      <body className="flex flex-col h-screen overflow-hidden bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <OnboardingGuard>
           <Header
             userName={currentUser.name}

@@ -38,7 +38,7 @@ export default function SettingsPage() {
 
   if (isLoading || !currentUser) {
     return (
-      <main className="flex min-h-screen flex-col items-center text-white">
+      <main className="flex flex-1 overflow-auto flex-col items-center text-white">
         <div className="container flex flex-col items-center gap-8 px-4 py-16">
           <p className="text-white/50">Loading...</p>
         </div>
@@ -47,7 +47,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center text-white">
+    <main className="flex flex-1 overflow-auto flex-col items-center text-white">
       <div className="container flex flex-col items-center gap-8 px-4 py-16">
         <div className="text-center">
           <h1 className="text-5xl font-extrabold tracking-tight">Settings</h1>
