@@ -20,6 +20,8 @@ export async function cleanTestDb() {
   await pgliteInstance.exec(`
     TRUNCATE "pg-drizzle_credit_balance" CASCADE;
     TRUNCATE "pg-drizzle_contact" CASCADE;
+    TRUNCATE "pg-drizzle_company" CASCADE;
+    TRUNCATE "pg-drizzle_ai_preferences" CASCADE;
     TRUNCATE "user" CASCADE;
   `);
 }
