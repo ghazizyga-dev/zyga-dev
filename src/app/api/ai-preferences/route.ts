@@ -8,6 +8,7 @@ const updatePreferencesSchema = z.object({
   companyKnowledge: z.string().nullable().optional(),
   toneOfVoice: z.string().nullable().optional(),
   exampleMessages: z.array(z.string()).max(10).nullable().optional(),
+  signature: z.string().nullable().optional(),
 });
 
 async function handleGetPreferences() {
@@ -23,6 +24,8 @@ async function handleGetPreferences() {
       companyKnowledge: null,
       toneOfVoice: DEFAULT_TONE_OF_VOICE,
       exampleMessages: [],
+      signature: null,
+      userName: currentUser.name,
       onboardingCompleted: false,
     });
   }
@@ -31,6 +34,8 @@ async function handleGetPreferences() {
     companyKnowledge: preferences.companyKnowledge,
     toneOfVoice: getEffectiveToneOfVoice(preferences),
     exampleMessages: preferences.exampleMessages,
+    signature: preferences.signature,
+    userName: currentUser.name,
     onboardingCompleted: preferences.onboardingCompleted,
   });
 }
@@ -65,6 +70,7 @@ async function handleUpdatePreferences(request: Request) {
     companyKnowledge: parseResult.data.companyKnowledge ?? undefined,
     toneOfVoice: parseResult.data.toneOfVoice ?? undefined,
     exampleMessages: parseResult.data.exampleMessages ?? undefined,
+    signature: parseResult.data.signature ?? undefined,
   };
 
   const updatedPreferences = await IamService.updateAiPreferences(
@@ -76,6 +82,8 @@ async function handleUpdatePreferences(request: Request) {
     companyKnowledge: updatedPreferences.companyKnowledge,
     toneOfVoice: getEffectiveToneOfVoice(updatedPreferences),
     exampleMessages: updatedPreferences.exampleMessages,
+    signature: updatedPreferences.signature,
+    userName: currentUser.name,
     onboardingCompleted: updatedPreferences.onboardingCompleted,
   });
 }

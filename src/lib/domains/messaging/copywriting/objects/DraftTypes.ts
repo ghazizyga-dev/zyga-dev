@@ -14,6 +14,7 @@ export interface UserAiContext {
   companyKnowledge: string;
   toneOfVoice: string;
   exampleMessages: string[];
+  signature: string;
 }
 
 export interface DraftRequest {

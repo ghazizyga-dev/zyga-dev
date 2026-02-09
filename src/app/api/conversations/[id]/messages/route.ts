@@ -44,12 +44,13 @@ function buildConversationHistory(messages: { role: string; content: string }[])
     }));
 }
 
-async function buildUserAiContext(userId: string): Promise<UserAiContext> {
+async function buildUserAiContext(userId: string, userName: string): Promise<UserAiContext> {
   const aiPreferences = await IamService.getAiPreferences(userId);
   return {
     companyKnowledge: aiPreferences?.companyKnowledge ?? "",
     toneOfVoice: aiPreferences ? getEffectiveToneOfVoice(aiPreferences) : DEFAULT_TONE_OF_VOICE,
     exampleMessages: aiPreferences?.exampleMessages ?? [],
+    signature: aiPreferences?.signature ?? userName,
   };
 }
 
@@ -57,10 +58,11 @@ async function buildDraftRequest(
   contact: Contact,
   conversationId: number,
   userId: string,
+  userName: string,
 ): Promise<DraftRequest> {
   const [existingMessages, userAiContext] = await Promise.all([
     ConversationService.getMessages(conversationId),
-    buildUserAiContext(userId),
+    buildUserAiContext(userId, userName),
   ]);
   return {
     contactInfo: buildContactInfo(contact),
@@ -164,7 +166,7 @@ async function handleCreateMessage(
     return Response.json({ error: "Contact not found" }, { status: 404 });
   }
 
-  const draftRequest = await buildDraftRequest(contact, conversationId, currentUser.id);
+  const draftRequest = await buildDraftRequest(contact, conversationId, currentUser.id, currentUser.name);
   const draftResult = await generateDraftWithBilling(currentUser.id, conversationId, draftRequest);
 
   if (!draftResult) {

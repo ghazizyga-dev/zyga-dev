@@ -94,6 +94,7 @@ async function handleCreateConversation(request: Request) {
     companyKnowledge: aiPreferences?.companyKnowledge ?? "",
     toneOfVoice: aiPreferences ? getEffectiveToneOfVoice(aiPreferences) : "",
     exampleMessages: aiPreferences?.exampleMessages ?? [],
+    signature: aiPreferences?.signature ?? currentUser.name,
   };
 
   const draftResult = await generateDraftWithBilling(

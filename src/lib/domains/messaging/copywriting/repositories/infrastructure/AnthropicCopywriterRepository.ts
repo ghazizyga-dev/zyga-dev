@@ -41,6 +41,8 @@ function buildSystemPrompt(request: DraftRequest): string {
     });
   }
 
+  sections.push("", "## Signature", `Sign messages as: ${userAiContext.signature}`);
+
   sections.push("", "Write a short, personalized message. Be direct and professional, not pushy.");
 
   return sections.join("\n");
@@ -107,6 +109,8 @@ function buildAnalysisSystemPrompt(request: DraftRequest): string {
       sections.push(`Example ${index + 1}: ${message}`);
     });
   }
+
+  sections.push("", "## Signature", `Sign messages as: ${userAiContext.signature}`);
 
   sections.push("", "Use the analyze_conversation tool to provide your analysis and draft (if continuing).");
 

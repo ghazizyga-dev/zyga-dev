@@ -46,6 +46,7 @@ describe("preferencesActions.getEffectiveToneOfVoice", () => {
       companyKnowledge: null,
       toneOfVoice: "Casual and friendly",
       exampleMessages: [],
+      signature: null,
       onboardingCompleted: false,
     };
 
@@ -58,6 +59,7 @@ describe("preferencesActions.getEffectiveToneOfVoice", () => {
       companyKnowledge: null,
       toneOfVoice: null,
       exampleMessages: [],
+      signature: null,
       onboardingCompleted: false,
     };
 

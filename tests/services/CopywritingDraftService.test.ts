@@ -36,6 +36,7 @@ const baseRequest: DraftRequest = {
     companyKnowledge: "We sell enterprise SaaS products for workflow automation.",
     toneOfVoice: "Professional yet friendly, concise and value-focused.",
     exampleMessages: [],
+    signature: "Alice",
   },
   conversationHistory: [],
 };

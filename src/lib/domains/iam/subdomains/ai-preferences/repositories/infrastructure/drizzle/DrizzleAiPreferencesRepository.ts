@@ -22,6 +22,7 @@ function toAiPreferences(row: typeof aiPreferences.$inferSelect): AiPreferencesT
     companyKnowledge: row.companyKnowledge,
     toneOfVoice: row.toneOfVoice,
     exampleMessages: parseExampleMessages(row.exampleMessages),
+    signature: row.signature,
     onboardingCompleted: row.onboardingCompleted === 1,
   };
 }
@@ -48,6 +49,7 @@ export class DrizzleAiPreferencesRepository implements AiPreferencesRepository {
         companyKnowledge: input.companyKnowledge ?? null,
         toneOfVoice: input.toneOfVoice ?? null,
         exampleMessages: exampleMessagesJson,
+        signature: input.signature ?? null,
         createdAt: new Date(),
       })
       .onConflictDoUpdate({
@@ -56,6 +58,7 @@ export class DrizzleAiPreferencesRepository implements AiPreferencesRepository {
           ...(input.companyKnowledge !== undefined && { companyKnowledge: input.companyKnowledge }),
           ...(input.toneOfVoice !== undefined && { toneOfVoice: input.toneOfVoice }),
           ...(input.exampleMessages !== undefined && { exampleMessages: exampleMessagesJson }),
+          ...(input.signature !== undefined && { signature: input.signature }),
         },
       })
       .returning();

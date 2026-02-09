@@ -264,6 +264,7 @@ export const aiPreferences = createTable(
     companyKnowledge: col.text(),
     toneOfVoice: col.text(),
     exampleMessages: col.text(),
+    signature: col.text(),
     onboardingCompleted: col.integer().default(0).notNull(),
     createdAt: col
       .timestamp({ withTimezone: true })

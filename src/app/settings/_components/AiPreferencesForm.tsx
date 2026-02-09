@@ -11,6 +11,8 @@ interface AiPreferences {
   companyKnowledge: string | null;
   toneOfVoice: string | null;
   exampleMessages: string[];
+  signature: string | null;
+  userName: string;
 }
 
 export function AiPreferencesForm() {
@@ -22,6 +24,7 @@ export function AiPreferencesForm() {
   const [companyKnowledge, setCompanyKnowledge] = useState("");
   const [toneOfVoice, setToneOfVoice] = useState(DEFAULT_TONE_OF_VOICE);
   const [exampleMessages, setExampleMessages] = useState<string[]>([]);
+  const [signature, setSignature] = useState("");
 
   useEffect(() => {
     async function fetchPreferences() {
@@ -35,6 +38,7 @@ export function AiPreferencesForm() {
         setCompanyKnowledge(preferences.companyKnowledge ?? "");
         setToneOfVoice(preferences.toneOfVoice ?? DEFAULT_TONE_OF_VOICE);
         setExampleMessages(preferences.exampleMessages ?? []);
+        setSignature(preferences.signature ?? preferences.userName);
       } catch {
         setErrorMessage("Failed to load preferences. Please refresh the page.");
       } finally {
@@ -58,6 +62,7 @@ export function AiPreferencesForm() {
           companyKnowledge: companyKnowledge || undefined,
           toneOfVoice: toneOfVoice || undefined,
           exampleMessages,
+          signature: signature.trim() || null,
         }),
       });
 
@@ -91,6 +96,23 @@ export function AiPreferencesForm() {
           {successMessage}
         </div>
       )}
+
+      <div className="flex flex-col gap-2">
+        <label htmlFor="signature" className="text-sm font-medium">
+          Message Signature
+        </label>
+        <input
+          id="signature"
+          type="text"
+          value={signature}
+          onChange={(event) => setSignature(event.target.value)}
+          placeholder="Your name"
+          className="rounded-lg bg-white/10 px-4 py-3 text-white placeholder:text-white/30"
+        />
+        <p className="text-sm text-white/40">
+          How the AI will sign your messages
+        </p>
+      </div>
 
       <div className="flex flex-col gap-2">
         <label htmlFor="company-knowledge" className="text-sm font-medium">

@@ -1,0 +1,1 @@
+ALTER TABLE "pg-drizzle_ai_preferences" ADD COLUMN "signature" text;

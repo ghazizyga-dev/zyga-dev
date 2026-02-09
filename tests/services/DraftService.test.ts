@@ -83,6 +83,7 @@ const baseDraftRequest: DraftRequest = {
     companyKnowledge: "We sell enterprise SaaS products.",
     toneOfVoice: "Professional and concise.",
     exampleMessages: [],
+    signature: "Test User",
   },
   conversationHistory: [],
 };
