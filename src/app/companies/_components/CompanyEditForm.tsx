@@ -45,7 +45,7 @@ export function CompanyEditForm({
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: formData.name || undefined,
+          name: formData.name,
           industry: formData.industry || undefined,
           size: formData.size || undefined,
           website: formData.website || undefined,

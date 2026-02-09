@@ -48,7 +48,15 @@ const handlers = withApiLogging(
         return Response.json({ error: "Unauthorized" }, { status: 401 });
       }
 
-      const body: unknown = await request.json();
+      let body: unknown;
+      try {
+        body = await request.json();
+      } catch {
+        return Response.json(
+          { error: "Invalid or missing JSON body" },
+          { status: 400 },
+        );
+      }
       const parseResult = updateCompanySchema.safeParse(body);
       if (!parseResult.success) {
         return Response.json(
