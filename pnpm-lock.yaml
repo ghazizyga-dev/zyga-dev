@@ -59,11 +59,11 @@ devDependencies:
     specifier: ^20.14.10
     version: 20.19.30
   '@types/react':
-    specifier: ^19.0.0
-    version: 19.2.10
+    specifier: ^19.2.13
+    version: 19.2.13
   '@types/react-dom':
     specifier: ^19.0.0
-    version: 19.2.3(@types/react@19.2.10)
+    version: 19.2.3(@types/react@19.2.13)
   better-sqlite3:
     specifier: ^12.6.2
     version: 12.6.2
@@ -2048,16 +2048,16 @@ packages:
       '@types/node': 20.19.30
     dev: false
 
-  /@types/react-dom@19.2.3(@types/react@19.2.10):
+  /@types/react-dom@19.2.3(@types/react@19.2.13):
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
     peerDependencies:
       '@types/react': ^19.2.0
     dependencies:
-      '@types/react': 19.2.10
+      '@types/react': 19.2.13
     dev: true
 
-  /@types/react@19.2.10:
-    resolution: {integrity: sha512-WPigyYuGhgZ/cTPRXB2EwUw+XvsRA3GqHlsP4qteqrnnjDrApbS7MxcGr/hke5iUoeB7E/gQtrs9I37zAJ0Vjw==}
+  /@types/react@19.2.13:
+    resolution: {integrity: sha512-KkiJeU6VbYbUOp5ITMIc7kBfqlYkKA5KhEHVrGMmUUMt7NeaZg65ojdPk+FtNrBAOXNVM5QM72jnADjM+XVRAQ==}
     dependencies:
       csstype: 3.2.3
     dev: true
