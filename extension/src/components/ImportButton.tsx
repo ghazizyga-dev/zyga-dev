@@ -19,17 +19,9 @@ export function ImportButton({ profile, company, onImported }: ImportButtonProps
     setErrorMessage(null);
 
     try {
-      // Create contact first to avoid orphan companies if contact creation fails
-      const contactResult = await post<{ id: number }>("/api/contacts", {
-        firstName: profile.firstName,
-        lastName: profile.lastName,
-        company: company?.name ?? undefined,
-        jobTitle: profile.currentJobTitle ?? undefined,
-        notes: profile.headline ?? undefined,
-        linkedinProviderId: profile.providerId,
-        linkedinUrl: profile.linkedinUrl,
-      });
+      let companyId: number | undefined;
 
+      // Create company first so we can link it during contact creation
       if (includeCompany && company) {
         const companyResult = await post<{ id: number }>("/api/contacts/companies", {
           name: company.name,
@@ -39,12 +31,20 @@ export function ImportButton({ profile, company, onImported }: ImportButtonProps
           size: company.size ?? undefined,
           website: company.website ?? undefined,
         });
-
-        // Link company to the contact
-        await post(`/api/contacts/${contactResult.id}`, {
-          companyId: companyResult.id,
-        });
+        companyId = companyResult.id;
       }
+
+      // Create contact with companyId included
+      await post<{ id: number }>("/api/contacts", {
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        company: company?.name ?? undefined,
+        jobTitle: profile.currentJobTitle ?? undefined,
+        notes: profile.headline ?? undefined,
+        linkedinProviderId: profile.providerId,
+        linkedinUrl: profile.linkedinUrl,
+        companyId,
+      });
 
       onImported();
     } catch (error) {
