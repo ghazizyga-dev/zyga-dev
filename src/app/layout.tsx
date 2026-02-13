@@ -9,7 +9,7 @@ import { LandingPage } from "~/app/_components/landing-page";
 import { OnboardingGuard } from "~/app/_components/onboarding-guard";
 
 export const metadata: Metadata = {
-  title: "Ai Boilerplate",
+  title: "Zyga",
   description: "Automate your sales prospection with AI-powered messaging",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };

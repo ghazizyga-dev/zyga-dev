@@ -1,4 +1,4 @@
-# AI Boilerplate
+# Zyga
 
 A [T3 Stack](https://create.t3.gg/) boilerplate configured for AI-assisted development with enforced architecture constraints.
 

@@ -1,10 +1,10 @@
 {
-  "name": "ai-boilerplate",
+  "name": "zyga",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "cd extension && pnpm install --frozen-lockfile=false --prod=false && WXT_API_URL=$BETTER_AUTH_URL pnpm zip && cp .output/ai-boilerplate-extension-*-chrome.zip ../public/extension.zip && cd .. && next build",
+    "build": "cd extension && pnpm install --frozen-lockfile=false --prod=false && WXT_API_URL=$BETTER_AUTH_URL pnpm zip && cp .output/zyga-extension-*-chrome.zip ../public/extension.zip && cd .. && next build",
     "check": "eslint . && tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",

@@ -45,8 +45,9 @@ function UserAvatar({ userName, userImage }: { userName: string; userImage: stri
 export function Header({ userName, userImage, remainingCredits }: HeaderProps) {
   return (
     <header className="flex w-full items-center justify-between px-6 py-4">
-      <Link href="/" className="text-lg font-bold text-white no-underline">
-        Ai Boilerplate
+      <Link href="/" className="no-underline">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/zyga-logo.svg" alt="Zyga" className="h-8 brightness-0 invert" />
       </Link>
       <div className="flex items-center gap-4">
         <span className="text-sm text-white/70">{remainingCredits} credits</span>

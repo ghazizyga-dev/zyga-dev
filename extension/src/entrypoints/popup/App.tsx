@@ -54,7 +54,7 @@ export function App() {
   if (appState === "unauthenticated") {
     return (
       <div className="container">
-        <h1>AI Boilerplate</h1>
+        <h1>Zyga</h1>
         <LoginForm onSuccess={() => void checkSession()} />
       </div>
     );
@@ -62,7 +62,7 @@ export function App() {
 
   return (
     <div className="container">
-      <h1>AI Boilerplate</h1>
+      <h1>Zyga</h1>
       <OnboardingCheck userName={currentUser?.name ?? currentUser?.email ?? "User"} />
       <button className="sign-out" onClick={() => void handleSignOut()}>
         Sign out

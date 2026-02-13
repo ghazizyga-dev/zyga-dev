@@ -47,7 +47,7 @@ export default function OnboardingPage() {
 
   if (isLoading || !shouldShowWizard) {
     return (
-      <main className="flex min-h-screen flex-col items-center text-white">
+      <main className="flex flex-1 flex-col items-center overflow-y-auto text-white">
         <div className="container flex flex-col items-center gap-8 px-4 py-16">
           <p className="text-white/50">Loading...</p>
         </div>
@@ -56,7 +56,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center text-white">
+    <main className="flex flex-1 flex-col items-center overflow-y-auto text-white">
       <div className="container flex flex-col items-center gap-8 px-4 py-16">
         <OnboardingWizard />
       </div>

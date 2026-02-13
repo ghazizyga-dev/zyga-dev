@@ -4,7 +4,8 @@ export default function Home() {
   return (
     <main className="flex flex-1 overflow-auto flex-col items-center justify-center text-white">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h1 className="text-5xl font-extrabold tracking-tight">Ai Boilerplate</h1>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/zyga-logo.svg" alt="Zyga" className="h-16 brightness-0 invert" />
         <p className="max-w-lg text-center text-lg text-white/70">
           Automate your sales prospection with AI-powered messaging. Import your contacts,
           generate personalized outreach, and manage all your conversations in one place.

@@ -14,7 +14,7 @@ export default defineContentScript({
     let currentSlug: string | null = null;
 
     const shadowRootUi = await createShadowRootUi(ctx, {
-      name: "ai-boilerplate-panel",
+      name: "zyga-panel",
       position: "inline",
       anchor: "body",
       append: "last",

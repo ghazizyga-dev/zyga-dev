@@ -91,7 +91,7 @@ export function ProfilePanel({ linkedinUrl }: ProfilePanelProps) {
     return (
       <div style={PANEL_STYLES}>
         <div style={HEADER_STYLES} onClick={() => setIsMinimized(false)}>
-          <strong>AI Boilerplate</strong>
+          <strong>Zyga</strong>
           <span style={{ fontSize: "12px" }}>expand</span>
         </div>
       </div>
@@ -101,7 +101,7 @@ export function ProfilePanel({ linkedinUrl }: ProfilePanelProps) {
   return (
     <div style={PANEL_STYLES}>
       <div style={HEADER_STYLES} onClick={() => setIsMinimized(true)}>
-        <strong>AI Boilerplate</strong>
+        <strong>Zyga</strong>
         <span style={{ fontSize: "12px" }}>minimize</span>
       </div>
 

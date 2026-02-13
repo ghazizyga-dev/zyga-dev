@@ -122,7 +122,7 @@ export function OnboardingWizard() {
     <div className="flex w-full max-w-2xl flex-col gap-8">
       <div className="text-center">
         <h1 className="text-4xl font-extrabold tracking-tight">
-          Welcome to Ai Boilerplate!
+          Welcome to Zyga!
         </h1>
         <p className="mt-4 text-lg text-white/70">
           Help your AI write better messages by telling it about your company
